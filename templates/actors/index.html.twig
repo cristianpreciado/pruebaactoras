@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actors index{% endblock %}
+
+{% block body %}
+    <h1>Actors index</h1>
+    <div class="form-group">
+        <label >filtro por estado</label>
+        <select class="form-control" id="filtroEstado">
+            <option value="0">Inactivo</option>
+            <option value="1">Activo</option>
+        </select>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>StatusActors</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody id="tablafiltrar">
+        {% for actor in actors %}
+            <tr>
+                <td>{{ actor.id }}</td>
+                <td>{{ actor.nombre }}</td>
+                <td>{{ actor.statusActors ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('actors_show', {'id': actor.id}) }}" class="edit" title="Ver" data-toggle="tooltip"><i class="material-icons">visibility</i></a>
+                    <a href="{{ path('actors_edit', {'id': actor.id}) }}" class="edit" title="Editar" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">sin resultados</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('actors_new') }}" class="btn btn-info add-new"><i class="fa fa-plus"></i> Agregar actores</a>
+
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $( "#filtroEstado" ).change(function( event ) {
+                var url = "{{ path('actors_filter_satus', {'status': 0}) }}";
+                if (this.value==1) {
+                    url = "{{ path('actors_filter_satus', {'status': 1}) }}";
+                }
+                event.preventDefault();
+                $.ajax(
+                {
+                    url : url,
+                    type: "GET",
+                })
+                .done(function(data) {
+                    console.log('ashs: ',data);
+                    $("#respuesta").html(data);
+                })
+                .fail(function(data) {
+                        alert( "error" );
+                })
+                .always(function(data) {
+                    let datostabla="<tr><td colspan='4'>sin resultados</td></tr>"
+                    $.each(data,function(index, value){
+                        if (index==0) {
+                            datostabla="";
+                        }
+                        datostabla+=`<tr>
+                            <td>${value.id}</td>
+                            <td>${value.nombre}</td>
+                            <td>${value.statusActors? 'Yes' : 'No'}</td>
+                            <td>
+                                <a href="{{ path('actors_show', {'id': '${value.id}'})|escape('js') }}" class="edit" title="Ver" data-toggle="tooltip"><i class="material-icons">visibility</i></a>
+                                <a href="{{ path('actors_edit', {'id': '${value.id}'})|escape('js') }}" class="edit" title="Editar" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            </td>
+                        </tr>`;
+
+                    });
+                    $('#tablafiltrar').empty().html(datostabla);
+                });
+            });
+        }); 
+    </script>
+{% endblock %}

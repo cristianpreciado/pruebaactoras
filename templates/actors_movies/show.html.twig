@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ActorsMovies{% endblock %}
+
+{% block body %}
+    <h1>ActorsMovies</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ actors_movie.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('actors_movies_index') }}">back to list</a>
+
+    <a href="{{ path('actors_movies_edit', {'id': actors_movie.id}) }}">edit</a>
+
+    {{ include('actors_movies/_delete_form.html.twig') }}
+{% endblock %}

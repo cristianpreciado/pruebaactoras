@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Movies index{% endblock %}
+
+{% block body %}
+    <h1>Movies index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Gener</th>
+                <th>Year</th>
+                <th>StatusMovie</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for movie in movies %}
+            <tr>
+                <td>{{ movie.id }}</td>
+                <td>{{ movie.name }}</td>
+                <td>{{ movie.gener }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.statusMovie ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('movies_show', {'id': movie.id}) }}" class="edit" title="Ver" data-toggle="tooltip"><i class="material-icons">visibility</i></a>
+                    <a href="{{ path('movies_edit', {'id': movie.id}) }}" class="edit" title="Editar" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('movies_new') }}" class="btn btn-info add-new"><i class="fa fa-plus"></i> Agregar peliculas</a>
+{% endblock %}

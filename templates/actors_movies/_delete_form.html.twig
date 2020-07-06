@@ -1,0 +1,23 @@
+<form method="post" action="{{ path('actors_movies_delete', {'id': actors_movie.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ actors_movie.id) }}">
+    <button class="btn">Delete</button>
+</form>
+<script type="text/javascript">
+$( document ).ready(function() {
+  $.ajax(
+{
+  url : "{{ path('actors_movies_delete', {'id': actors_movie.id}) }}",
+  type: "POST"
+})
+  .done(function(data) {
+    $("#respuesta").html(data);
+  })
+  .fail(function(data) {
+    alert( "error" );
+  })
+  .always(function(data) {
+    alert( "complete" );
+  });
+});
+</script>

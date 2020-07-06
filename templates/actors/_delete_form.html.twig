@@ -1,0 +1,33 @@
+<form method="post" id="actoreliminar" action="#">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ actor.id) }}">
+    <button class="btn">Delete</button>
+</form>
+<div id="respuesta"></div>
+<script type="text/javascript">
+$( document ).ready(function() {
+	$( "#actoreliminar" ).submit(function( event ) {
+  		event.preventDefault();
+  		var r = confirm("Seguro de eliminar el item");
+		if (r == true) {
+		  	$.ajax(
+				{
+			  		url : "{{ path('actors_delete', {'id': actor.id}) }}",
+			  		type: "POST",
+			  		data: $( "#actoreliminar" ).serialize(),
+				})
+				.done(function(data) {
+			    	$("#respuesta").html(data);
+				})
+			  	.fail(function(data) {
+			    		alert( "error" );
+			  	})
+			  	.always(function(data) {
+			    	alert( "complete" );
+				});
+		} else {
+		  return false;
+		} 
+	});
+});
+</script>
